@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+MAX_SIZE=4294967295 
+
+# If no arguments were passed print help message and exit
+if [ $# -eq 0 ]
+  then 
+    printf "Usage: fatzip FILE\n\n"
+    msg+="Compress FILE with bzip2, splitting it into files of size no "
+    msg+="longer than 4GB, which is the limit in FAT filesystems."
+    echo $msg | fold -s
+    exit 1
+fi
+
+FILEPATH=$1
+NAME=$(basename $1)
+
+# Compress file with bzip2, splitting into files of size no longer than MAX_SIZE
+pv $FILEPATH | bzip2 -c | split -b 2000000000 - "$NAME.bz2"

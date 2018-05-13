@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# If no arguments were passed print help message and exit
+if [ $# -eq 0 ]
+  then 
+    printf "Usage: fatunzip FILE\n\n"
+    msg+="Decompresses a file into target FILE with bzip2, concatenating all "
+    msg+="the found parts. It is assumed that the original was compressed and "
+    msg+="split with the fatzip script."
+    echo $msg | fold -s
+    exit 1
+fi
+
+FILEPATH=$1
+NAME=$(basename $1)
+size=0
+
+# use a loop to calculate the size of the final file
+for i in $FILEPATH*
+do
+    bytes=$(wc -c < $i)
+    size=`expr $size + $bytes`
+done
+
+# decompress all parts with bzcat and show progress with pv
+# Write to file with the same name as input minus the bzip2 extension
+cat $FILEPATH* | bzcat | pv -s $size > "${NAME%.bz2}" 
