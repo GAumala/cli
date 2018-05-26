@@ -15,4 +15,4 @@ FILEPATH=$1
 NAME=$(basename $1)
 
 # Compress file with bzip2, splitting into files of size no longer than MAX_SIZE
-pv $FILEPATH | bzip2 -c | split -b 2000000000 - "$NAME.bz2"
+pv $FILEPATH | bzip2 -c | split -b $MAX_SIZE - "$NAME.bz2"
