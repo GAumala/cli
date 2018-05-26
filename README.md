@@ -23,3 +23,6 @@ and `pv` to be installed.
 Decompresses the output of `fatzip`, showing a progress bar until the task is
 done. Requires `bzip2` and `pv` to be installed.
 
+### webjpg
+
+Compresses an image, optimizing it for the web using `imagemagick`. 

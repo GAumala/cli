@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# If no arguments were passed print help message and exit
+if [ $# -eq 0 ]
+  then
+    printf "Usage: webjpg FILE [MAX_SIZE]\n\n"
+    msg+="Compress image in FILE, optimizing it for the web with imagemagick. " 
+    msg+="The result will be an jpg image with the '_compressed.jpg' suffix. " 
+    msg+="If MAX_SIZE is provided the image will be resized to fit in MAX_SIZE." 
+    echo $msg | fold -s
+    exit 1
+fi
+
+FILEPATH=$1
+NAME=$(basename $1)
+OUTPUT="${NAME%.*}_compressed.jpg"
+RESIZE_SETTING=""
+
+if [ -n "$2" ]
+  then # user passed a maximum size to scale to
+    RESIZE_SETTING="-resize $2"
+fi
+
+# compress according to https://stackoverflow.com/a/44208640
+convert $FILEPATH -sampling-factor 4:2:0 -strip -quality 85 -interlace JPEG -colorspace RGB $RESIZE_SETTING $OUTPUT
